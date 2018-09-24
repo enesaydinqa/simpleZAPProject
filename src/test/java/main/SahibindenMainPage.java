@@ -19,8 +19,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.zaproxy.clientapi.core.ClientApi;
 import org.zaproxy.clientapi.gen.Core;
 
-import java.awt.*;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,7 +53,7 @@ public class SahibindenMainPage {
         //Desktop.getDesktop().open(new File("/Applications/OWASP ZAP.app"));
         //Thread.sleep(20000);
 
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(cap);
         driver.manage().window().maximize();
 
     }
@@ -66,7 +64,9 @@ public class SahibindenMainPage {
         WebDriverWait wait = new WebDriverWait(driver, 20);
 
         driver.navigate().to(BaseURL);
+
         MainPageElements mainpage = PageFactory.initElements(driver, MainPageElements.class);
+
         wait.until(ExpectedConditions.visibilityOf(mainpage.SEARCHTEXT));
         mainpage.SEARCHTEXT.sendKeys("istanbul");
         mainpage.SEARCHBUTTON.click();
@@ -75,8 +75,10 @@ public class SahibindenMainPage {
 
         List<String> categoryDataId = new ArrayList<>();
 
+        // Get Category Data ID
         resultCategory.forEach(item -> categoryDataId.add(item.getAttribute("data-id")));
 
+        // Category assert href
         List<String> breadcrumbItem = new ArrayList<String>();
         breadcrumbItem.add("emlak/istanbul");
         breadcrumbItem.add("kategori/vasita");
@@ -90,6 +92,7 @@ public class SahibindenMainPage {
         breadcrumbItem.add("kategori/hayvanlar-alemi");
 
 
+        // Click category and assert href
         IntStream.range(0, categoryDataId.size())
                 .forEach(i -> {
                     AdPageElements adPage = PageFactory.initElements(driver, AdPageElements.class);
@@ -105,6 +108,7 @@ public class SahibindenMainPage {
     @After
     public void teardown() {
 
+        // ZAP api generate HTML Report
         try {
             ClientApi clientApi = new ClientApi(HOST, PROXY);
             Core core = new Core(clientApi);
