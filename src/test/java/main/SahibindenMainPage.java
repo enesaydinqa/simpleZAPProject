@@ -52,6 +52,8 @@ public class SahibindenMainPage {
             System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/drivers/chromedriver.exe");
         }
 
+
+        // Open ZAP Tool¨
         Desktop.getDesktop().open(new File("/Applications/OWASP ZAP.app"));
 
         Thread.sleep(20000);
