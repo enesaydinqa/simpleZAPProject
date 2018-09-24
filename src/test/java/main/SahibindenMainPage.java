@@ -32,7 +32,7 @@ public class SahibindenMainPage {
 
     private static WebDriver driver;
     private static String HOST = "localhost";
-    private static int PROXY = 8090;
+    private static int PROXY = 40496;
     static String BaseURL = "https://www.sahibinden.com/";
 
 
@@ -53,6 +53,7 @@ public class SahibindenMainPage {
         }
 
         Desktop.getDesktop().open(new File("/Applications/OWASP ZAP.app"));
+
         Thread.sleep(20000);
 
         driver = new ChromeDriver(cap);
