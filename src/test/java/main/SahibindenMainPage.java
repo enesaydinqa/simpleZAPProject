@@ -19,6 +19,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.zaproxy.clientapi.core.ClientApi;
 import org.zaproxy.clientapi.gen.Core;
 
+import java.awt.*;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class SahibindenMainPage {
 
     private static WebDriver driver;
     private static String HOST = "localhost";
-    private static int PROXY = 8080;
+    private static int PROXY = 8090;
     static String BaseURL = "https://www.sahibinden.com/";
 
 
@@ -50,8 +52,8 @@ public class SahibindenMainPage {
             System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/drivers/chromedriver.exe");
         }
 
-        //Desktop.getDesktop().open(new File("/Applications/OWASP ZAP.app"));
-        //Thread.sleep(20000);
+        Desktop.getDesktop().open(new File("/Applications/OWASP ZAP.app"));
+        Thread.sleep(20000);
 
         driver = new ChromeDriver(cap);
         driver.manage().window().maximize();
