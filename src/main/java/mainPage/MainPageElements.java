@@ -5,7 +5,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-public class mainPageElements {
+public class MainPageElements {
 
     @FindBy(id = "searchText")
     public WebElement SEARCHTEXT;

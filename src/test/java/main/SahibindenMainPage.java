@@ -1,7 +1,7 @@
 package main;
 
-import adPage.adPageElements;
-import mainPage.mainPageElements;
+import adPage.AdPageElements;
+import mainPage.MainPageElements;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 
 public class SahibindenMainPage {
@@ -51,10 +52,10 @@ public class SahibindenMainPage {
             System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/drivers/chromedriver.exe");
         }
 
-        Desktop.getDesktop().open(new File("/Applications/OWASP ZAP.app"));
-        Thread.sleep(20000);
+        //Desktop.getDesktop().open(new File("/Applications/OWASP ZAP.app"));
+        //Thread.sleep(20000);
 
-        driver = new ChromeDriver(cap);
+        driver = new ChromeDriver();
         driver.manage().window().maximize();
 
     }
@@ -65,18 +66,16 @@ public class SahibindenMainPage {
         WebDriverWait wait = new WebDriverWait(driver, 20);
 
         driver.navigate().to(BaseURL);
-        mainPageElements mainpage = PageFactory.initElements(driver, mainPageElements.class);
+        MainPageElements mainpage = PageFactory.initElements(driver, MainPageElements.class);
         wait.until(ExpectedConditions.visibilityOf(mainpage.SEARCHTEXT));
         mainpage.SEARCHTEXT.sendKeys("istanbul");
         mainpage.SEARCHBUTTON.click();
 
         List<WebElement> resultCategory = mainpage.RESULTCATEGORIES;
 
-        List<String> categoryDataId = new ArrayList<String>();
+        List<String> categoryDataId = new ArrayList<>();
 
-        for (WebElement elements : resultCategory) {
-            categoryDataId.add(elements.getAttribute("data-id"));
-        }
+        resultCategory.forEach(item -> categoryDataId.add(item.getAttribute("data-id")));
 
         List<String> breadcrumbItem = new ArrayList<String>();
         breadcrumbItem.add("emlak/istanbul");
@@ -90,16 +89,16 @@ public class SahibindenMainPage {
         breadcrumbItem.add("yardimci-arayanlar");
         breadcrumbItem.add("kategori/hayvanlar-alemi");
 
-        for (int i = 0; i < categoryDataId.size(); i++) {
 
-            adPageElements adPage = PageFactory.initElements(driver, adPageElements.class);
-            By category = By.cssSelector("[data-id='" + categoryDataId.get(i) + "']");
-            wait.until(ExpectedConditions.elementToBeClickable(category));
-            driver.findElement(category).click();
-            Assert.assertEquals(BaseURL + breadcrumbItem.get(i), adPage.BREADCRUMB.getAttribute("href"));
-            driver.navigate().back();
-        }
-
+        IntStream.range(0, categoryDataId.size())
+                .forEach(i -> {
+                    AdPageElements adPage = PageFactory.initElements(driver, AdPageElements.class);
+                    By category = By.cssSelector("[data-id='" + categoryDataId.get(i) + "']");
+                    wait.until(ExpectedConditions.elementToBeClickable(category));
+                    driver.findElement(category).click();
+                    Assert.assertEquals(BaseURL + breadcrumbItem.get(i), adPage.BREADCRUMB.getAttribute("href"));
+                    driver.navigate().back();
+                });
 
     }
 
